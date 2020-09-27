@@ -9,9 +9,10 @@
     <string id="32003">RandomZoomIn</string>
     <string id="32004">AppleTVLike</string>
     <string id="32005">GridSwitch</string>
-    <string id="32006">Random</string>
-    <string id="32007">Random Order</string>
-    <string id="32008">Recursive</string>
+    <string id="32006">SlidingPanels</string>
+    <string id="32007">Random</string>
+    <string id="32008">Random Order</string>
+    <string id="32009">Recursive</string>
 
     <string id="32010">Source</string>
     <string id="32011">Movies</string>
@@ -28,6 +29,25 @@
     <string id="32303">Speed</string>
     <string id="32304">Image Concurrency</string>
     <string id="32305">Random Order</string>
+    <string id="32306">Border</string>
+    <string id="32307">Description of Images</string>
+    <string id="32308">View</string>
+    <string id="32309">Symmetric grid</string>
+    <string id="32310">Random rectangles</string>
+    <string id="32311">Amount of rectangles</string>
+    <string id="32312">Border width</string>
+    <string id="32313">Border color</string>
+    <string id="32314">black</string>
+    <string id="32315">white</string>
+    <string id="32316">Shuffle view after iterations</string>
+    <string id="32317">Position of description</string>
+    <string id="32318">top left</string>
+    <string id="32319">top center</string>
+    <string id="32320">top right</string>
+    <string id="32321">bottom left</string>
+    <string id="32322">bottom center</string>
+    <string id="32323">bottom right</string>
+
     <string id="32500">No Images found!</string>
     <string id="32501">Using Fallback Movie or Music Fanart</string>
 </strings>
