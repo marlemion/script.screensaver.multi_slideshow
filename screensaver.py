@@ -125,7 +125,7 @@ class Cache(threading.Thread):
         # set the next image to an unvisible image-control for caching
         self.log('caching image: %s' % repr(image_url))
         image_url = self.rotate_image(image_url)
-        screensaver.preload_controls[image_url] = ControlImage(-1, -1, 1, 1, image_url)
+        screensaver.preload_controls[image_url] = ControlImage(-1, -1, 1, 1, image_url, False)
         screensaver.preload_controls[image_url].setVisible(False)
         screensaver.xbmc_window.addControl(screensaver.preload_controls[image_url])
         self.log('caching done')
@@ -1086,6 +1086,7 @@ class SlidingPanelsScreensaver(ScreensaverBase):
         
             while ( len(rectangles) < number ):
 
+                rectangles.sort(key=lambda x: x.area, reverse=True)
                 rectangle = rectangles[0]
                 rectangles = rectangles + rectangle.random_divide()
                 rectangles.remove(rectangle)
