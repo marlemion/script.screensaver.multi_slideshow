@@ -1,0 +1,202 @@
+# Kodi Media Center language file
+# Addon Name: Multi Slideshow Screensaver
+# Addon id: script.screensaver.multi_slideshow
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Screensaver"
+msgstr "Bildschirmschoner"
+
+msgctxt "#32001"
+msgid "TableDrop"
+msgstr "TableDrop"
+
+msgctxt "#32002"
+msgid "StarWars"
+msgstr "StarWars"
+
+msgctxt "#32003"
+msgid "RandomZoomIn"
+msgstr "RandomZoomIn"
+
+msgctxt "#32004"
+msgid "AppleTVLike"
+msgstr "AppleTVLike"
+
+msgctxt "#32005"
+msgid "GridSwitch"
+msgstr "GridSwitch"
+
+msgctxt "#32006"
+msgid "SlidingPanels"
+msgstr "SlidingPanels"
+
+msgctxt "#32007"
+msgid "Random"
+msgstr "Zufall"
+
+msgctxt "#32008"
+msgid "Random Order"
+msgstr "Zufällige Reihenfolge"
+
+msgctxt "#32009"
+msgid "Recursive"
+msgstr "Rekursiv"
+
+msgctxt "#32010"
+msgid "Source"
+msgstr "Quelle"
+
+msgctxt "#32011"
+msgid "Movies"
+msgstr "Filme"
+
+msgctxt "#32012"
+msgid "Folder"
+msgstr "Verzeichnis"
+
+msgctxt "#32013"
+msgid "Property"
+msgstr "Eigenschaft"
+
+msgctxt "#32014"
+msgid "Albums"
+msgstr "Alben"
+
+msgctxt "#32015"
+msgid "Fanart"
+msgstr "Fanart"
+
+msgctxt "#32016"
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+msgctxt "#32017"
+msgid "TV-Shows"
+msgstr "TV-Serien"
+
+msgctxt "#32100"
+msgid "Mode"
+msgstr "Modus"
+
+msgctxt "#32200"
+msgid "Image Source"
+msgstr "Bildquelle"
+
+msgctxt "#32300"
+msgid "Wait Time"
+msgstr "Wartezeit"
+
+msgctxt "#32301"
+msgid "Effect Time"
+msgstr "Effektzeit"
+
+msgctxt "#32302"
+msgid "Rows and Columns"
+msgstr "Reihen und Spalten"
+
+msgctxt "#32303"
+msgid "Speed"
+msgstr "Geschwindigkeit"
+
+msgctxt "#32304"
+msgid "Image Concurrency"
+msgstr "Bildgleichzeitigkeit"
+
+msgctxt "#32305"
+msgid "Random Order"
+msgstr "Zufällige Reihenfolge"
+
+msgctxt "#32306"
+msgid "Border"
+msgstr "Rahmen"
+
+msgctxt "#32307"
+msgid "Description of Images"
+msgstr "Beschreibung der Bilder"
+
+msgctxt "#32308"
+msgid "View"
+msgstr "Darstellung"
+
+msgctxt "#32309"
+msgid "Symmetric grid"
+msgstr "Symmetrisches Gitter"
+
+msgctxt "#32310"
+msgid "Random rectangles"
+msgstr "Zufällige Rechtecke"
+
+msgctxt "#32311"
+msgid "Amount of rectangles"
+msgstr "Anzahl der Rechtecke"
+
+msgctxt "#32312"
+msgid "Border width"
+msgstr "Rahmendicke"
+
+msgctxt "#32313"
+msgid "Border color"
+msgstr "Rahmenfarbe"
+
+msgctxt "#32314"
+msgid "black"
+msgstr "schwarz"
+
+msgctxt "#32315"
+msgid "white"
+msgstr "weiß"
+
+msgctxt "#32316"
+msgid "Shuffle view after iterations"
+msgstr "Neuanordnung nach Durchläufen"
+
+msgctxt "#32317"
+msgid "Position of description"
+msgstr "Beschreibungsposition"
+
+msgctxt "#32318"
+msgid "top left"
+msgstr "oben links"
+
+msgctxt "#32319"
+msgid "top center"
+msgstr "oben mittigs"
+
+msgctxt "#32320"
+msgid "top right"
+msgstr "oben rechts"
+
+msgctxt "#32321"
+msgid "bottom left"
+msgstr "unten links"
+
+msgctxt "#32322"
+msgid "bottom center"
+msgstr "unten mittigs"
+
+msgctxt "#32323"
+msgid "bottom right"
+msgstr "unten rechts"
+
+msgctxt "#32500"
+msgid "No Images found!"
+msgstr "Keine Bilder gefunden!"
+
+msgctxt "#32501"
+msgid "Using Fallback Movie or Music Fanart"
+msgstr "Benutze Fallback Filme oder Musik Fanart"
+

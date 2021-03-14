@@ -19,12 +19,7 @@
 
 import random
 import sys
-
-if sys.version_info >= (2, 7):
-    import json
-else:
-    import simplejson as json
-
+import simplejson as json
 from PIL import Image, ExifTags
 from os import path, remove
 import re
@@ -114,7 +109,7 @@ class Cache(threading.Thread):
             if ( not self.pause.isSet() ):
                 if ( len(screensaver.preload_controls) < screensaver.FAST_IMAGE_COUNT):
                     self.idle.clear()
-                    image_url = self.cache_cycle_image.next()
+                    image_url = next(self.cache_cycle_image)
                     self.preload_image(image_url)
                     self.idle.set()
             if ( self.stop.isSet() ):
@@ -143,12 +138,12 @@ class Cache(threading.Thread):
             image=Image.open(image_url)
         
             try:
-                exif=dict(image._getexif().items())
+                exif=dict(list(image._getexif().items()))
             except AttributeError:
                 exif=[]
        
             try:            
-                for orientation in ExifTags.TAGS.keys():
+                for orientation in list(ExifTags.TAGS.keys()):
                     if ExifTags.TAGS[orientation]=='Orientation':
                         break
                 if exif[orientation] == 3:
@@ -174,10 +169,11 @@ class Cache(threading.Thread):
             image.close()
    
             try:            
-                for datetimeoriginal in ExifTags.TAGS.keys():
+                for datetimeoriginal in list(ExifTags.TAGS.keys()):
                     if ExifTags.TAGS[datetimeoriginal]=='DateTimeOriginal':
                         break
-                screensaver.image_dates[image_url] = exif[datetimeoriginal].encode('ascii', 'ignore')
+                #screensaver.image_dates[image_url] = exif[datetimeoriginal].encode('ascii', 'ignore')
+                screensaver.image_dates[image_url] = exif[datetimeoriginal]
             except ( IndexError, KeyError ):
                 screensaver.image_dates[image_url] = ''
 
@@ -199,7 +195,7 @@ class Cache(threading.Thread):
 
 
     def log(self, msg):
-        xbmc.log(u'%s: Cache: %s' % (ADDON_NAME, msg))
+        xbmc.log('%s: Cache: %s' % (ADDON_NAME, msg))
 
 
 class ScreensaverBase(object):
@@ -249,13 +245,14 @@ class ScreensaverBase(object):
         self.stack_cycle_controls()
         self.log('__init__ end')
 
+
     def init_global_controls(self):
 
         self.screen_width = Window().getWidth()
         self.screen_height = Window().getHeight()
 
         self.log('init_global_controls start')
-        loading_img = xbmc.validatePath('/'.join((
+        loading_img = xbmcvfs.validatePath('/'.join((
             ADDON_PATH, 'resources', 'media', 'loading.gif'
         )))
         self.background_control = ControlImage(0, 0, self.screen_width, self.screen_height, '')
@@ -265,13 +262,14 @@ class ScreensaverBase(object):
         self.xbmc_window.addControls(self.global_controls)
         self.log('init_global_controls end')
 
+
     def load_settings(self):
         pass
 
 
     def init_cycle_controls(self):
         self.log('init_cycle_controls start')
-        for i in xrange(self.IMAGE_CONTROL_COUNT):
+        for i in range(self.IMAGE_CONTROL_COUNT):
             img_control = ControlImage(0, 0, 0, 0, '', aspectRatio=1)
             self.image_controls.append(img_control)
         self.log('init_cycle_controls end')
@@ -303,16 +301,16 @@ class ScreensaverBase(object):
         image_url_cycle = cycle(images)
         image_controls_cycle = cycle(self.image_controls)
 
-        image_url = image_url_cycle.next()
-        image_control = image_controls_cycle.next()
+        image_url = next(image_url_cycle)
+        image_control = next(image_controls_cycle)
 
         # Preload in case of first initating
         self.log('initial caching started')
-        self.dialog.create('Caching images...', line1='', line2='', line3='' )
+        self.dialog.create('Caching images...', '' )
         while len(self.preload_controls) < self.FAST_IMAGE_COUNT:
             #time.sleep(10)
             time.sleep(0.01)
-            self.dialog.update(int(100 * len(self.preload_controls) / self.FAST_IMAGE_COUNT), '    ', "   ", "   ")
+            self.dialog.update(int(100 * len(self.preload_controls) / self.FAST_IMAGE_COUNT), '    ')
         self.dialog.close()
 
         # Fade in the background
@@ -333,13 +331,13 @@ class ScreensaverBase(object):
             self.recycle = True
     
             # Now load the images in
-            for image_url, control in self.preload_controls.items():
+            for image_url, control in list(self.preload_controls.items()):
 
                # Wait
                self.wait()
 
                if not self.exit_requested:
-                   image_control = image_controls_cycle.next()
+                   image_control = next(image_controls_cycle)
                    self.log('loading image: %s' % repr(image_url))
                    self.process_image(image_control, image_url)
                    self.image_count += 1
@@ -392,7 +390,7 @@ class ScreensaverBase(object):
                     self.log('setting image controls to background color')
                     for image_control in self.image_controls:
                         self.process_image(image_control, self.BORDER_COLOR)
-                        image_control = image_controls_cycle.next()
+                        image_control = next(image_controls_cycle)
                         # Tidy up and move on
                         try:
                             self.cacher.delete_rotated_image(image_url)
@@ -426,9 +424,9 @@ class ScreensaverBase(object):
                     while cache_counter <= self.FAST_IMAGE_COUNT:
 
                         # Get the image_url and the image_control
-                        for image_url, control in self.preload_controls.items():
+                        for image_url, control in list(self.preload_controls.items()):
                             break
-                        image_control = image_controls_cycle.next()
+                        image_control = next(image_controls_cycle)
                         self.log('loading image: %s' % repr(image_url))
                         self.process_image(image_control, image_url)
                         self.image_count += 1
@@ -441,7 +439,6 @@ class ScreensaverBase(object):
                         del self.preload_controls[image_url]
                         #except KeyError:
                         #    pass
-
 
                     # Let the cache do its work again
                     self.cacher.pause.clear()
@@ -456,10 +453,10 @@ class ScreensaverBase(object):
                     time.sleep(0.05)
 
                 # Get the image_url and the image_control
-                for image_url, control in self.preload_controls.items():
+                for image_url, control in list(self.preload_controls.items()):
                     break
 
-                image_control = image_controls_cycle.next()
+                image_control = next(image_controls_cycle)
    
                 if ( self.CONTINUOUS is False ):
                     # Disable caching
@@ -492,10 +489,10 @@ class ScreensaverBase(object):
                     time.sleep(0.05)
 
                 # Get the image_url from the cache
-                for image_url, control in self.preload_controls.items():
+                for image_url, control in list(self.preload_controls.items()):
                     break
 
-                image_control = image_controls_cycle.next()
+                image_control = next(image_controls_cycle)
 
                 if ( self.CONTINUOUS is False ):
                     # Disable caching
@@ -579,14 +576,14 @@ class ScreensaverBase(object):
         directories, files = xbmcvfs.listdir(path)
 
         for directory in directories:
-            dirs.append(xbmc.validatePath('/'.join((path, directory, ''))))
+            dirs.append(xbmcvfs.validatePath('/'.join((path, directory, ''))))
 
         if addon.getSetting('recursive') == 'true':
             for directory in directories:
                 if directory.startswith('.'):
                     continue
-                for sub_directory in self._get_folder_dirs([], xbmc.validatePath('/'.join((path, directory, '')))):
-                    dirs.append(xbmc.validatePath(sub_directory))
+                for sub_directory in self._get_folder_dirs([], xbmcvfs.validatePath('/'.join((path, directory, '')))):
+                    dirs.append(xbmcvfs.validatePath(sub_directory))
         
         return dirs
 
@@ -599,7 +596,7 @@ class ScreensaverBase(object):
             directories, files = xbmcvfs.listdir(path)
 
             images = [
-                xbmc.validatePath(path + f) for f in files
+                xbmcvfs.validatePath(path + f) for f in files
                 if f.lower()[-3:] in ('jpg', 'png', 'bmp')
             ]
 
@@ -619,7 +616,7 @@ class ScreensaverBase(object):
 
 
     def show_background(self):
-        bg_img = xbmc.validatePath('/'.join((
+        bg_img = xbmcvfs.validatePath('/'.join((
             ADDON_PATH, 'resources', 'media', self.BACKGROUND_IMAGE
         )))
         self.background_control.setAnimations([(
@@ -681,7 +678,7 @@ class ScreensaverBase(object):
         self.log('del_controls end')
 
     def log(self, msg):
-        xbmc.log(u'%s: %s' % (ADDON_NAME, msg))
+        xbmc.log('%s: %s' % (ADDON_NAME, msg))
 
 
 class TableDropScreensaver(ScreensaverBase):
@@ -861,8 +858,8 @@ class AppleTVLikeScreensaver(ScreensaverBase):
         for image_control in self.image_controls:
             zoom = int(random.betavariate(2, 2) * 40) + 10
             #zoom = int(random.randint(10, 70))
-            width = self.screen_width / 100 * zoom
-            image_control.setWidth(width)
+            width = int(self.screen_width / 100 * zoom)
+            image_control.setWidth(int(width))
         self.image_controls = sorted(
             self.image_controls, key=lambda c: c.getWidth()
         )
@@ -884,7 +881,7 @@ class AppleTVLikeScreensaver(ScreensaverBase):
         height = int(width / self.image_aspect_ratio)
         # let images overlap max 1/2w left or right
         center = random.randint(0, self.screen_width)
-        x_position = center - width / 2
+        x_position = int(center - width / 2)
         y_position = 0
 
         time = self.MAX_TIME / zoom * self.DISTANCE_RATIO * 100
@@ -930,10 +927,10 @@ class GridSwitchScreensaver(ScreensaverBase):
         super(GridSwitchScreensaver, self).stack_cycle_controls()
         for i, image_control in enumerate(self.image_controls):
             current_row, current_col = divmod(i, self.ROWS_AND_COLUMNS)
-            width = self.screen_width / self.ROWS_AND_COLUMNS
-            height = self.screen_height / self.ROWS_AND_COLUMNS
-            x_position = width * current_col
-            y_position = height * current_row
+            width = int(self.screen_width / self.ROWS_AND_COLUMNS)
+            height = int(self.screen_height / self.ROWS_AND_COLUMNS)
+            x_position = int(width * current_col)
+            y_position = int(height * current_row)
             image_control.setPosition(x_position, y_position)
             image_control.setWidth(width)
             image_control.setHeight(height)
@@ -1020,12 +1017,12 @@ class SlidingPanelsScreensaver(ScreensaverBase):
             self.DESCRIPTION_X = 1
 
         if ( self.BORDER_COLOR == 0 ):
-            self.BORDER_COLOR = xbmc.validatePath('/'.join((
+            self.BORDER_COLOR = xbmcvfs.validatePath('/'.join((
                 ADDON_PATH, 'resources', 'media', 'black.jpg'
             )))
             self.BACKGROUND_IMAGE="black.jpg"
         elif ( self.BORDER_COLOR == 1 ):
-            self.BORDER_COLOR = xbmc.validatePath('/'.join((
+            self.BORDER_COLOR = xbmcvfs.validatePath('/'.join((
                 ADDON_PATH, 'resources', 'media', 'white.jpg'
             )))
             self.BACKGROUND_IMAGE="white.jpg"
@@ -1171,7 +1168,17 @@ class SlidingPanelsScreensaver(ScreensaverBase):
                 else:
                     height = orig_height - border
                     y_position = orig_y_position + half_border
-    
+   
+            # Move to int
+            orig_y_position = int(orig_y_position)
+            orig_x_position = int(orig_x_position)
+            y_position = int(y_position)
+            x_position = int(x_position)
+            orig_height = int(orig_height)
+            orig_width = int(orig_width)
+            height = int(height)
+            width = int(width)
+
             # Set the dimensions of the image control for sliding the panels
             image_control.setPosition(x_position, y_position)
             image_control.setWidth(width)
@@ -1225,10 +1232,10 @@ class SlidingPanelsScreensaver(ScreensaverBase):
         # Highest up are the borders
         # Below are the labels
         # Below the labes are the top images
-        self.border_controls = [ i for l in [ [ l_ctrl for l, l_ctrl in l_lists ] for l_lists in [ ctrls['border_controls'].items() for k, ctrls in self.custom_controls.items() ] ] for i in l ]
-        self.black_label_controls = [ i for l in [ [ l_ctrl for l, l_ctrl in l_lists ] for l_lists in [ ctrls['black_label_controls'].items() for k, ctrls in self.custom_controls.items() ] ] for i in l ]
-        self.white_label_controls = [ i for l in [ [ l_ctrl for l, l_ctrl in l_lists ] for l_lists in [ ctrls['white_label_controls'].items() for k, ctrls in self.custom_controls.items() ] ] for i in l ]
-        self.top_image_controls = [ ctrls['top_image_control'] for k, ctrls in self.custom_controls.items() ]
+        self.border_controls = [ i for l in [ [ l_ctrl for l, l_ctrl in l_lists ] for l_lists in [ list(ctrls['border_controls'].items()) for k, ctrls in list(self.custom_controls.items()) ] ] for i in l ]
+        self.black_label_controls = [ i for l in [ [ l_ctrl for l, l_ctrl in l_lists ] for l_lists in [ list(ctrls['black_label_controls'].items()) for k, ctrls in list(self.custom_controls.items()) ] ] for i in l ]
+        self.white_label_controls = [ i for l in [ [ l_ctrl for l, l_ctrl in l_lists ] for l_lists in [ list(ctrls['white_label_controls'].items()) for k, ctrls in list(self.custom_controls.items()) ] ] for i in l ]
+        self.top_image_controls = [ ctrls['top_image_control'] for k, ctrls in list(self.custom_controls.items()) ]
 
         # Add top image controls
         self.xbmc_window.addControls(self.top_image_controls)
@@ -1254,11 +1261,11 @@ class SlidingPanelsScreensaver(ScreensaverBase):
         leftup_out = bool(random.getrandbits(1))
 
         # Get the control labels
-	custom_controls = self.custom_controls[image_control.getId()]
-	top_image_control = custom_controls['top_image_control']
-	border_controls = custom_controls['border_controls']
-	black_label_controls = [ label_controls for key, label_controls in custom_controls['black_label_controls'].items() ]
-        white_label_controls = [ label_controls for key, label_controls in custom_controls['white_label_controls'].items() ]
+        custom_controls = self.custom_controls[image_control.getId()]
+        top_image_control = custom_controls['top_image_control']
+        border_controls = custom_controls['border_controls']
+        black_label_controls = [ label_controls for key, label_controls in list(custom_controls['black_label_controls'].items()) ]
+        white_label_controls = [ label_controls for key, label_controls in list(custom_controls['white_label_controls'].items()) ]
 
         # If the status of visibility is False, we entered the image_control the first time
         if ( image_control.isVisible() ):
@@ -1266,7 +1273,7 @@ class SlidingPanelsScreensaver(ScreensaverBase):
         else:
             initiating = True
             image_control.setVisible(True)
-            for key, border_control in border_controls.items():
+            for key, border_control in list(border_controls.items()):
                 border_control.setImage(self.BORDER_COLOR)
 
             # Set the timing to fast values
