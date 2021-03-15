@@ -135,7 +135,7 @@ class Cache(threading.Thread):
 
             ROTATED = False
             
-            image=Image.open(image_url)
+            image=Image.open(open(image_url, 'rb'))
         
             try:
                 exif=dict(list(image._getexif().items()))
@@ -160,7 +160,7 @@ class Cache(threading.Thread):
 
             if ( ROTATED is True ):
                 self.log('rotating image: %s' % repr(image_url))
-                filepath = path.join(xbmc.translatePath("special://temp/"), path.split(image_url)[1])
+                filepath = path.join(xbmcvfs.translatePath("special://temp/"), path.split(image_url)[1])
                 image.save(filepath)
                 self.rotated_pictures.append(filepath)
                 self.images[:] = [ x if x != image_url else filepath for x in self.images ]
@@ -172,7 +172,6 @@ class Cache(threading.Thread):
                 for datetimeoriginal in list(ExifTags.TAGS.keys()):
                     if ExifTags.TAGS[datetimeoriginal]=='DateTimeOriginal':
                         break
-                #screensaver.image_dates[image_url] = exif[datetimeoriginal].encode('ascii', 'ignore')
                 screensaver.image_dates[image_url] = exif[datetimeoriginal]
             except ( IndexError, KeyError ):
                 screensaver.image_dates[image_url] = ''

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.screensaver.multi_slideshow" name="Multi Slideshow Screensaver" version="0.1.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="script.screensaver.multi_slideshow" name="Multi Slideshow Screensaver" version="0.1.2" provider-name="Wilhelm Eger (wilhelm.eger@gmail.com)">
     <requires>
-        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="xbmc.python" version="3.0.0"/>
     </requires>
     <extension point="xbmc.ui.screensaver" library="screensaver.py" />
     <extension point="xbmc.python.script" library="screensaver.py" />
@@ -13,6 +13,6 @@
         <forum>http://forum.xbmc.org/showthread.php?tid=173734</forum>
         <email>sphere@dersphere.de</email>
         <summary lang="en">Implements several different multi-image screensavers</summary>
-        <description lang="en">This Screensaver provides several different multi-image screensavers:[CR] AppleTVLike, TableDrop, StarWars, RandomZoomIn, GridSwitch</description>
+        <description lang="en">This Screensaver provides several different multi-image screensavers:[CR] AppleTVLike, TableDrop, StarWars, RandomZoomIn, GridSwitch, SlidingPanels</description>
     </extension>
 </addon>
